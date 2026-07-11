@@ -2,6 +2,8 @@
 
 Remap / VIA対応の自作キーボードをWebHIDで読み取り、実際のキーマップ（レイヤー・レイアウトオプション込み）を表示してタイピング練習ができるWebアプリ。
 
+**公開サイト: https://penguin4glte.github.io/remap-typing/** （Chrome / Edge で開いてください）
+
 ## 使い方（ローカル実行）
 
 ```
