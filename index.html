@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remap Keymap Typing — キーマップ読取＆タイピング練習</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <h1 aria-label="Remap Keymap Typing">
+      <span class="wm-caps" aria-hidden="true">
+        <span class="wm-cap acc">R</span><span class="wm-cap">E</span><span class="wm-cap">M</span><span class="wm-cap">A</span><span class="wm-cap">P</span>
+      </span>
+      <span class="wm-text">Keymap Typing<span class="dot">_</span></span>
+    </h1>
+    <div class="toolbar">
+      <button id="btnConnect" class="primary">キーボードを接続</button>
+      <button id="btnDisconnect" class="hidden">接続を解除</button>
+      <button id="btnDef">VIA定義JSONを読み込む</button>
+      <button id="btnDemo">デモ (60% ANSI)</button>
+      <input type="file" id="fileDef" accept=".json,application/json" class="hidden">
+    </div>
+  </header>
+  <p class="status" id="status">未接続 — Remap / VIA対応キーボードをUSBで接続し「キーボードを接続」を押してください。</p>
+
+  <section class="card">
+    <h2>キーマップ <button id="btnChangeDef" class="linklike hidden">定義を変更…</button></h2>
+    <div class="import-bar" id="importBar">
+      <input id="defUrl" placeholder="GitHub上の via.json のURLを貼り付け（blobページのURLでもOK）">
+      <button id="btnDefUrl">URLから読み込む</button>
+      <span class="import-hint">JSONファイルをこのページにドロップ、またはJSONテキストを Ctrl+V で貼り付けても読み込めます。Keyball・Crkbd・Lily58などは接続するだけで自動読み込みされます。
+        読み込んだ定義は保存され次回自動復元されます — <button id="btnResetDef" class="linklike">保存済みの定義を削除</button></span>
+    </div>
+    <div class="layout-opts hidden" id="layoutOpts"></div>
+    <div class="layer-tabs" id="layerTabs"></div>
+    <div class="board-scroll">
+      <div id="board"><div class="board-empty">
+        キーボードを接続し、対応する <code>VIA定義JSON</code> を読み込むとキーマップがここに表示されます。まずは「デモ」で試すこともできます。
+      </div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>タイピング練習</h2>
+    <div class="practice-head">
+      <select id="mode">
+        <option value="words">英単語</option>
+        <option value="home">ホームポジション（キーマップから自動生成）</option>
+        <option value="symbols">記号・数字</option>
+        <option value="code">OSSコード</option>
+        <option value="custom">カスタムテキスト</option>
+      </select>
+      <select id="codeSource" class="hidden"></select>
+      <button id="btnStart" class="primary" disabled>スタート</button>
+      <button id="btnStop" class="hidden">中断</button>
+    </div>
+    <input id="codeUrl" class="hidden" placeholder="https://github.com/owner/repo/blob/branch/path/to/file">
+    <textarea id="customText" class="hidden" placeholder="練習したいテキストを入力してください（半角英数記号）"></textarea>
+    <div id="resultBox" class="result hidden"></div>
+    <div class="target" id="target"><span class="idle">キーマップを読み込むと練習を開始できます。押すべきキーが上のキーボードにハイライトされます。</span></div>
+    <p class="hint" id="hint"></p>
+    <div class="stats">
+      <div class="stat"><div class="v" id="stWpm">0</div><div class="l">WPM</div></div>
+      <div class="stat good"><div class="v" id="stAcc">100<span class="u">%</span></div><div class="l">正確率</div></div>
+      <div class="stat"><div class="v" id="stTime">0.0<span class="u">s</span></div><div class="l">時間</div></div>
+      <div class="stat bad"><div class="v" id="stMiss">0</div><div class="l">ミス</div></div>
+    </div>
+  </section>
+
+  <footer class="note">
+    WebHID を使うため Chrome / Edge が必要です。キーマップは VIA プロトコル（Remap と同じ仕組み）でキーボードのEEPROMから直接読み取るので、Remapで書き換えた内容がそのまま反映されます。
+    練習の判定はOSに届いた文字（KeyboardEvent.key）で行うため、OS側のレイアウト設定（JIS/US）が異なると記号キーがずれることがあります。
+  </footer>
+</div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
