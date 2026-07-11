@@ -21,6 +21,10 @@ export function parseKLE(rows){
         const op=parts[3]?parts[3].split(',').map(n=>parseInt(n,10)):null;
         if(!dec && mm.length===2 && !isNaN(mm[0]) && !isNaN(mm[1]))
           keys.push({x,y,w,h,r,rx,ry,row:mm[0],col:mm[1],opt:op});
+        else if(op)
+          // マトリクス割り当てのないオプション付きキー＝位置合わせ用スペーサー。
+          // 描画はしないが、オプション群のバウンディングボックス計算には必要（例: Keyball61のLeft）
+          keys.push({x,y,w,h,r,rx,ry,row:-1,col:-1,opt:op,ghost:true});
         x+=w; w=1; h=1; dec=false;
       }
     }
@@ -38,11 +42,12 @@ export function applyLayout(allKeys, sel){
   });
   const out=[];
   for(const k of allKeys){
+    if(k.ghost) continue;                    // スペーサーは位置合わせ専用。描画しない
     if(!k.opt||k.opt.length<2){ out.push(k); continue; }
     const [g,o]=k.opt;
     if((sel[g]??0)!==o) continue;
     if(o===0){ out.push(k); continue; }
-    const base=groups[g][0], own=groups[g][o];
+    const base=groups[g][0], own=groups[g][o];  // bboxはスペーサー込みで計算する
     if(!base||!base.length){ out.push(k); continue; }
     const dx=Math.min(...base.map(b=>b.x))-Math.min(...own.map(b=>b.x));
     const dy=Math.min(...base.map(b=>b.y))-Math.min(...own.map(b=>b.y));
